@@ -144,7 +144,7 @@ function Mainform () {
         <Form.Item
           label="Address"
           name="address"
-          style={{ width: "30%", layout: "inline", marginBottom: '0px', fontSize: '16px' }}
+          style={{ width: "80%", layout: "inline", marginBottom: '0px', fontSize: '16px' }}
         >
           <AutoComplete
             options={options}
@@ -159,17 +159,17 @@ function Mainform () {
       <Form.Item
           label="Your carbon emissions are:"
           name="carbonemissons"
-          style={{ width: "60%"}}
+          style={{ width: "80%"}}
       ><div style={{fontSize: "18px"}}>{actualEmissions}</div></Form.Item>
       <Form.Item
           label="Your allowable emissions under Local Law 97 are:"
           name="carbonemissons"
-          style={{ width: "30%"}}
+          style={{ width: "80%"}}
       ><div style={{fontSize: "18px"}}>{allowedEmissions}</div></Form.Item>
       <Form.Item
           label="Your potential fine based on last available data is:"
           name="carbonemissons"
-          style={{ width: "30%"}}
+          style={{ width: "80%"}}
       ><div style={{fontSize: "18px"}}>{fineAmount}</div></Form.Item>
     </Form>
     <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', alignItems: 'center', gap: '20px', marginLeft: "10vw", marginRight: "20vw"}}>

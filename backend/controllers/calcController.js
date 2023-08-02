@@ -13,12 +13,12 @@ module.exports.calcFine = async(req, res, next) => {
         }
         else
         {
-            const key = req.query.key;
+            const key = req.query.key.toLowerCase();
 
             const stream = fs.createReadStream(`././public/${fileName}`)
             .pipe(csvParser())
             .on('data', (data) => {
-                let address = data["﻿Address 1"];
+                let address = data["﻿Address 1"].toLowerCase();
                 if(address.includes(key)){
                     let columnD = data["Largest Property Use Type - Gross Floor Area (ft²)"];
                     if((25000 - columnD) > 0){
@@ -147,14 +147,14 @@ module.exports.getAddress = async(req, res, next) => {
         }
         else
         {
-            const key = req.query.key;
+            const key = req.query.key.toLowerCase();
 
             let results = [];
 
             fs.createReadStream(`././public/${fileName}`)
             .pipe(csvParser())
             .on('data', (data) => {
-                let address = data["﻿Address 1"];
+                let address = data["﻿Address 1"].toLowerCase();
                 if(address.includes(key)){
                     results.push(address);
                 }
