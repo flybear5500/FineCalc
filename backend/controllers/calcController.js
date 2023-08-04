@@ -96,8 +96,8 @@ module.exports.calcAllAddress = async(req, res, next) => {
                     let calculatedSum = columnH - columnI;
                     let calculatedEmissions = columnD * 0.00675;
                     let fineAmount = 0;
-                    if(calculatedEmissions > calculatedSum){
-                        fineAmount = (calculatedEmissions - calculatedSum)*268;
+                    if(calculatedSum > calculatedEmissions){
+                        fineAmount = (calculatedSum - calculatedEmissions)*268;
                     }
     
                     // Add to records if fineAmount > 0

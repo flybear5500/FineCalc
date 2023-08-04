@@ -1,6 +1,6 @@
 import React, { useState  } from 'react';
 import axios from "axios";
-import { Form, Spin , AutoComplete, message, Button } from 'antd';
+import { Form, Spin , AutoComplete, message, Button, Input } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import { Chart } from "react-google-charts";
 import { calcFine, searchAddress, calcAllAddress } from "./utils/APIRoutes";
@@ -21,12 +21,11 @@ function Mainform () {
   const [allowedEmissions, setAllowedEmissions] = useState("0");
   const [fineAmount, setFineAmount ] = useState("0");
   const [loading, setLoading] = useState(false);
+  const [selectionMode, setSelectionMode] = useState(false);
 
-  const data = [
+  const data3 = [
     ["Element", "Amount", { role: "style" }],
     ["Natural Gas Use (therms)", parseFloat(colE), "#964B00"], // RGB value
-    ["Electricity Use - Grid Purchase (kWh)", parseFloat(colF), "#FFFF00"], // English color name
-    ["Water Use (All Water Sources) (kgal)", parseFloat(colJ), "#0000FF"]
   ];
 
   const data2 = [
@@ -34,6 +33,16 @@ function Mainform () {
     ["Allowed emissions", parseFloat(allowedEmissions), "#4285F4"], // RGB value
     ["Actual emissions", parseFloat(actualEmissions), "#EA4335"], // English color name
     ["Fine Amount", parseFloat(fineAmount), "#FBC02D"]
+  ];
+
+  const data4 = [
+    ["Element", "Amount", { role: "style" }],
+    ["Electricity Use - Grid Purchase (kWh)", parseFloat(colF), "#FFFF00"], // English color name
+  ];
+
+  const data5 = [
+    ["Element", "Amount", { role: "style" }],
+    ["Water Use (All Water Sources) (kgal)", parseFloat(colJ), "#0000FF"]
   ];
 
   const onSelect = async(data) => {
@@ -47,6 +56,7 @@ function Mainform () {
     setColF(0);
     setColJ(0);
     setLoading(true);
+    setSelectionMode(false);
 
     try{
       
@@ -65,6 +75,7 @@ function Mainform () {
           }
           else
           {
+            setSelectionMode(true);
             setActualEmissions(data["actualEmissions"]);
             setAllowedEmissions(data["allowedEmissions"]);
             setFineAmount(data["fineAmount"]);
@@ -142,40 +153,64 @@ function Mainform () {
     >
       <div style={{layout: "inline", display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
         <Form.Item
-          label="Address"
+          label={<span style={{fontSize: "20px", fontFamily: "Merriweather"}}>Address</span>}
           name="address"
           style={{ width: "80%", layout: "inline", marginBottom: '0px', fontSize: '16px' }}
         >
           <AutoComplete
             options={options}
             style={{
-              width: 200,
+              width: 300,
+              fontSize: "20px"
             }}
             onSelect = {onSelect}
             onSearch = {onSearch}
-          />
+          ><Input style={{ fontSize: '16px' }} /></AutoComplete>
         </Form.Item>
       </div>
-      <Form.Item
-          label="Your carbon emissions are:"
-          name="carbonemissons"
-          style={{ width: "80%"}}
-      ><div style={{fontSize: "18px"}}>{actualEmissions}</div></Form.Item>
-      <Form.Item
-          label="Your allowable emissions under Local Law 97 are:"
-          name="carbonemissons"
-          style={{ width: "80%"}}
-      ><div style={{fontSize: "18px"}}>{allowedEmissions}</div></Form.Item>
-      <Form.Item
-          label="Your potential fine based on last available data is:"
-          name="carbonemissons"
-          style={{ width: "80%"}}
-      ><div style={{fontSize: "18px"}}>{fineAmount}</div></Form.Item>
-    </Form>
-    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', alignItems: 'center', gap: '20px', marginLeft: "10vw", marginRight: "20vw"}}>
-      <Chart chartType="ColumnChart" width="30vw" height="400px" data={data2} options={{vAxis: { textStyle: { color: '#000000' } } }} />
-      <Chart chartType="ColumnChart" width="30vw" height="400px" data={data} options={{vAxis: { textStyle: { color: '#000000' } } }} />
-      <Button type="primary" icon={<DownloadOutlined />} onClick={ onFineDownload }>
+      {selectionMode && (
+        <div>
+          <Form.Item
+              label={<span style={{fontSize: "20px", fontFamily: "Merriweather"}}>Your carbon emissions are</span>}
+              name="carbonemissons"
+              style={{ width: "80%", fontSize: "30px"}}
+          ><div style={{fontSize: "18px"}}>{actualEmissions}</div></Form.Item>
+          <Form.Item
+              label={<span style={{fontSize: "20px", fontFamily: "Merriweather"}}>Your allowable emissions under Local Law 97 are</span>}
+              name="carbonemissons"
+              style={{ width: "80%"}}
+          ><div style={{fontSize: "18px"}}>{allowedEmissions}</div></Form.Item>
+          <Form.Item
+              label={
+                <span style={{fontSize: "20px", fontFamily: "Merriweather"}}>
+                  {fineAmount === "0.00" 
+                    ? "Based on the last available data you are likely to have no fine." 
+                    : "Your potential fine based on last available data is"
+                  }
+                </span>
+              }
+              name="carbonemissions"
+              style={{ width: "100%", fontSize: "24px"}}
+              colon={fineAmount === "0.00" ? false : true}
+          >
+          <div style={{fontSize: "18px"}}>{fineAmount === "0.00" ? null : fineAmount}</div>
+          </Form.Item>
+        </div>
+      )}
+    </Form>    
+    <div style={{
+      display: 'grid', 
+      gridTemplateColumns: '2fr 1.2fr 1.2fr 1.2fr 0.2fr', 
+      alignItems: 'center', 
+      gap: '20px', 
+      marginLeft: "5vw", 
+      
+    }}>
+      <Chart chartType="ColumnChart" width="100%" height="400px" data={data2} options={{vAxis: { textStyle: { color: '#000000' } } }} />
+      <Chart chartType="ColumnChart" width="100%" height="400px" data={data3} options={{vAxis: { textStyle: { color: '#000000' } } }} />
+      <Chart chartType="ColumnChart" width="100%" height="400px" data={data4} options={{vAxis: { textStyle: { color: '#000000' } } }} />
+      <Chart chartType="ColumnChart" width="100%" height="400px" data={data5} options={{vAxis: { textStyle: { color: '#000000' } } }} />
+      <Button type="primary" icon={<DownloadOutlined />} onClick={ onFineDownload } style={{backgroundColor: "rgb(249 67 67 / 79%)"}}>
         Download Fine.csv
       </Button>
     </div>

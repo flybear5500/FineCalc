@@ -14,11 +14,11 @@ function App() {
             display: 'flex',
             alignItems: 'center',
             height: '100px',
-            background: '#58a1e7',
+            background: '#f0f0f0',
           }}
         >
           <Image src="./daisy-logo.png" height={'100%'} preview={false} style={ {padding: "20px"} }></Image>
-          <div style={{margin: "25%", color: "white", fontSize: "40px", fontFamily: "Harlow Solid"}}>Local Law 97 Fines Calculator</div>
+          <div style={{margin: "25%", color: "black", fontSize: "40px", fontFamily: "Merriweather"}}>Local Law 97 Fines Calculator</div>
         </Header>
       <Content
         style={{
@@ -48,7 +48,7 @@ function App() {
           textAlign: 'center',
           backgroundColor: 'black',
           color: 'white',
-          background: '#58a1e7',
+          background: 'rgb(249 67 67 / 79%)',
         }}
       >
         <div style={{fontSize:'16px'}}>@Local Law 97 Fines Calculator</div>
